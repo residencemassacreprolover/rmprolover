@@ -6,7 +6,7 @@
 -- starts the libarary, obsidian UI + ESP
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/Library.lua"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/ESP.lua"))()
-
+local Options = Library.Options
 -- Loading Screen
 local Loading = Library:CreateLoading({
     Title = "Residence Massacre Paint-d",
