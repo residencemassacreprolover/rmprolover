@@ -10,13 +10,15 @@ shared.ESPColors = {
     Mutant = Color3.fromRGB(255, 0, 80),
     Zombie = Color3.fromRGB(0, 255, 100),
     Items = Color3.fromRGB(0, 150, 255),
-    Objectives = Color3.fromRGB(255, 200, 0)
+    Objectives = Color3.fromRGB(255, 200, 0),
+    Player = Color3.fromRGB(1,1,1)
 }
 shared.ESPCategories = {
     Mutant = true,
     Zombie = true,
     Items = true,
-    Objectives = true
+    Objectives = true,
+    Player = true
 }
 
 local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/MS-ESP/refs/heads/main/source.lua"))()
@@ -101,6 +103,9 @@ task.spawn(function()
     while task.wait(0.5) do
         for model, esp in pairs(ActiveESP) do
             local category = ESP_REGISTRY[model.Name]
+                if not category and game.Players:GetPlayerFromCharacter(model) then
+    category = "Player"
+                end
             if shared.ESPEnabled and category and shared.ESPCategories[category] then
                 esp.SetVisible(true)
                 esp.SetColor(shared.ESPColors[category])
