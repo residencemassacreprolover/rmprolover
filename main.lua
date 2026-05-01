@@ -370,58 +370,61 @@ end)
 
 local EspGB = maintab:AddRightGroupbox("ESP", "wrench")
 
-shared.ESPEnabled = false
-shared.ESPCategories.Mutant = true
-shared.ESPCategories.Zombie = false
-shared.ESPCategories.Items = false
-shared.ESPCategories.Objectives = false
-shared.ESPCategories.Player = true
 
+shared.ESPEnabled = false
+shared.ESPCategories = {
+    Mutant = true,
+    Zombie = false,
+    Items = false,
+    Objectives = false,
+    Player = true
+}
+
+-
 local enableESP = EspGB:AddToggle("EnableESP", {
-    Text = "EnableESP",
+    Text = "Enable ESP",
     Default = false,
     Callback = function(Value)
-    shared.ESPEnabled = Value
+        shared.ESPEnabled = Value
     end
 })
 
-local enableMutantESP = EspGB:AddCheckbox("MutantESP", {
+local enableMutantESP = EspGB:AddToggle("MutantESP", { 
     Text = "Mutant ESP",
     Default = true,
     Callback = function(Value)
-    shared.ESPCategories.Mutant = Value
+        shared.ESPCategories.Mutant = Value
     end
 })
 
-local enableZombieESP = EspGB:AddCheckbox("ZombieESP", {
+local enableZombieESP = EspGB:AddToggle("ZombieESP", {
     Text = "Zombie ESP",
     Default = false,
     Callback = function(Value)
-    shared.ESPCategories.Zombie = Value
+        shared.ESPCategories.Zombie = Value
     end
 })
 
-local enableItemsESP = EspGB:AddCheckbox("ItemsESP", {
+local enableItemsESP = EspGB:AddToggle("ItemsESP", {
     Text = "Items ESP",
     Default = false,
     Callback = function(Value)
-    shared.ESPCategories.Items = Value
+        shared.ESPCategories.Items = Value
     end
 })
 
-local enableObjectivesESP = EspGB:AddCheckbox("ObjectivesESP", {
+local enableObjectivesESP = EspGB:AddToggle("ObjectivesESP", {
     Text = "Objectives ESP",
     Default = false,
     Callback = function(Value)
-    shared.ESPCategories.Objectives = Value
+        shared.ESPCategories.Objectives = Value
     end
 })
 
-local enablePlayerESP = EspGB:AddCheckbox("PlayerESP", {
+local enablePlayerESP = EspGB:AddToggle("PlayerESP", {
     Text = "Player ESP",
     Default = true,
     Callback = function(Value)
-    shared.ESPCategories.Player = Value
+        shared.ESPCategories.Player = Value
     end
 })
-
