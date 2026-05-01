@@ -12,6 +12,12 @@ shared.ESPColors = {
     Items = Color3.fromRGB(0, 150, 255),
     Objectives = Color3.fromRGB(255, 200, 0)
 }
+shared.ESPCategories = {
+    Mutant = true,
+    Zombie = true,
+    Items = true,
+    Objectives = true
+}
 
 local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/MS-ESP/refs/heads/main/source.lua"))()
 local ActiveESP = {} -- cache
@@ -94,19 +100,18 @@ end
 task.spawn(function()
     while task.wait(0.5) do
         for model, esp in pairs(ActiveESP) do
-            if not shared.ESPEnabled then
-                esp.SetVisible(false)
-            else
+            local category = ESP_REGISTRY[model.Name]
+            if shared.ESPEnabled and category and shared.ESPCategories[category] then
                 esp.SetVisible(true)
-                -- Dynamic Color Update shinyy
-                local category = ESP_REGISTRY[model.Name]
-                if category then
-                    esp.SetColor(shared.ESPColors[category])
-                end
+                esp.SetColor(shared.ESPColors[category])
+            else
+                -- Hide it if either switch is not on
+                esp.SetVisible(false)
             end
         end
     end
 end)
+
 
 -- Initialize listeners
 workspace.ChildAdded:Connect(CheckInstance)
