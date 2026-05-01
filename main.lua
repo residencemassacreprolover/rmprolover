@@ -355,7 +355,7 @@ local tpwalkToggle = bypassGB:AddToggle("TPWalk", {
 })
 
 
-bypassGB:addSlider("TPWalkSpeed", {
+bypassGB:AddSlider("TPWalkSpeed", {
     Text = "TP Walk Speed",
     Default = 2,
     Min = 1,
@@ -380,7 +380,7 @@ shared.ESPCategories = {
     Player = true
 }
 
--
+
 local enableESP = EspGB:AddToggle("EnableESP", {
     Text = "Enable ESP",
     Default = false,
