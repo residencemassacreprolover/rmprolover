@@ -355,7 +355,7 @@ local tpwalkToggle = bypassGB:AddToggle("TPWalk", {
 })
 
 
-bypassGB:addslider("TPWalkSpeed", {
+bypassGB:addSlider("TPWalkSpeed", {
     Text = "TP Walk Speed",
     Default = 2,
     Min = 1,
