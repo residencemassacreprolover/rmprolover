@@ -364,7 +364,7 @@ bypassGB:AddSlider("TPWalkSpeed", {
     Suffix = "Studs/s",
 })
 
-Options.TPWalkSpeed:OnChanged(function(value)
+TPWalkSpeed:OnChanged(function(value)
     tpwalkSpeed = value
 end)
 
