@@ -362,11 +362,11 @@ bypassGB:AddSlider("TPWalkSpeed", {
     Max = 6,
     Rounding = 0,
     Suffix = "Studs/s",
+    Callback = function(Value)
+    tpwalkSpeed = value
+    end
 })
 
-TPWalkSpeed:OnChanged(function(value)
-    tpwalkSpeed = value
-end)
 
 local EspGB = maintab:AddRightGroupbox("ESP", "wrench")
 
