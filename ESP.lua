@@ -21,7 +21,10 @@ shared.ESPCategories = shared.ESPCategories or {
 }
 
 local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/source.lua"))()
+
 local ActiveESP = {}
+local TrackedEntities = {}
+
 local ESP_REGISTRY = {
     ["Winterhorn"] = "Mutant", ["WeirdDad"] = "Mutant", ["Mutant"] = "Mutant", ["Intruder"] = "Mutant",
     ["Zombie"] = "Zombie", ["FrozenZombie"] = "Zombie", ["FrozenBloodZombie"] = "Zombie", ["BloodZombie"] = "Zombie",
@@ -30,13 +33,16 @@ local ESP_REGISTRY = {
 
 local function CreateESP(model, category, customName)
     if ActiveESP[model] then return end
+    
     local primary = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
     local wasInvisible = false
     if primary and primary.Transparency == 1 then
         wasInvisible = true
         primary.Transparency = 0.99
     end
+
     local displayName = customName or ((category == "Mutant") and ("MUTANT: " .. model.Name) or model.Name:upper())
+    
     local instance = ESPLibrary.ESP.Highlight({
         Name = displayName,
         Model = model,
@@ -54,6 +60,7 @@ local function CreateESP(model, category, customName)
             ActiveESP[model] = nil
         end
     })
+    
     ActiveESP[model] = instance
 end
 
@@ -63,10 +70,14 @@ local function ApplyPlayerESP(player)
         task.wait(0.1)
         local hum = char:WaitForChild("Humanoid", 5)
         if hum then
-            CreateESP(char, "Player", string.format("%s [%.1f]", player.DisplayName, hum.Health))
+            TrackedEntities[char] = { Category = "Player", CustomName = string.format("%s [%.1f]", player.DisplayName, hum.Health) }
+            
             hum.HealthChanged:Connect(function(newHealth)
+                if TrackedEntities[char] then
+                    TrackedEntities[char].CustomName = string.format("%s [%.1f]", player.DisplayName, newHealth)
+                end
                 if ActiveESP[char] then
-                    pcall(function() ActiveESP[char].SetText(string.format("%s [%.1f]", player.DisplayName, newHealth)) end)
+                    pcall(function() ActiveESP[char].SetText(TrackedEntities[char].CustomName) end)
                 end
             end)
         end
@@ -78,32 +89,37 @@ end
 local function CheckInstance(child)
     if child.Name == "Model" then task.wait(0.1) end
     local category = ESP_REGISTRY[child.Name]
-    if category then CreateESP(child, category) end
+    if category then 
+        TrackedEntities[child] = { Category = category, CustomName = nil }
+    end
 end
 
 task.spawn(function()
     while task.wait(0.4) do
-        for model, esp in pairs(ActiveESP) do
+        for model, data in pairs(TrackedEntities) do
             pcall(function()
                 if not model or not model.Parent or not model.PrimaryPart then 
-                    if esp.Destroy then esp.Destroy() end
+                    if ActiveESP[model] and ActiveESP[model].Destroy then 
+                        ActiveESP[model].Destroy() 
+                    end
                     ActiveESP[model] = nil
+                    TrackedEntities[model] = nil
                     return 
                 end
 
-                local player = game.Players:GetPlayerFromCharacter(model)
-                local category = ESP_REGISTRY[model.Name] or (player and "Player")
-                
-                -- The single source of truth , quelle suprise.
-                local shouldBeVisible = shared.ESPEnabled and (category and shared.ESPCategories[category])
+                local shouldBeVisible = shared.ESPEnabled and (data.Category and shared.ESPCategories[data.Category])
 
-                esp.SetVisible(shouldBeVisible)
-
-                -- Brute-force turn off the library's lines and arrows bc idfk how it works bro
-                if esp.Tracer then esp.Tracer.Enabled = shouldBeVisible and shared.ESPSettings.Tracers end
-                if esp.Arrow then esp.Arrow.Enabled = shouldBeVisible end
                 if shouldBeVisible then
-                    esp.SetColor(shared.ESPColors[category])
+                    if not ActiveESP[model] then
+                        CreateESP(model, data.Category, data.CustomName)
+                    else
+                        ActiveESP[model].SetColor(shared.ESPColors[data.Category])
+                    end
+                else
+                    if ActiveESP[model] then
+                        if ActiveESP[model].Destroy then ActiveESP[model].Destroy() end
+                        ActiveESP[model] = nil
+                    end
                 end
             end)
         end
