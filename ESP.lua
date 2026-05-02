@@ -25,6 +25,7 @@ local ActiveESP = {}
 local ESP_REGISTRY = {
     ["Winterhorn"] = "Mutant", ["WeirdDad"] = "Mutant", ["Mutant"] = "Mutant", ["Intruder"] = "Mutant",
     ["Zombie"] = "Zombie", ["FrozenZombie"] = "Zombie", ["FrozenBloodZombie"] = "Zombie", ["BloodZombie"] = "Zombie",
+    ["Generator"] = "Objectives"
 }
 
 local function CreateESP(model, category, customName)
