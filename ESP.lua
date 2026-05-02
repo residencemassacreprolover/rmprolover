@@ -91,17 +91,25 @@ task.spawn(function()
 
                 local player = game.Players:GetPlayerFromCharacter(model)
                 local category = ESP_REGISTRY[model.Name] or (player and "Player")
-                
-                if not shared.ESPEnabled or not (category and shared.ESPCategories[category]) then
-                    esp.SetVisible(false)
-                else
-                    esp.SetVisible(true)
+                local shouldBeVisible = shared.ESPEnabled and (category and shared.ESPCategories[category])
+                esp.SetVisible(shouldBeVisible)
+                if esp.Components then
+                    for _, component in pairs(esp.Components) do
+                        if component.SetVisible then
+                            component.SetVisible(shouldBeVisible)
+                        elseif typeof(component) == "Instance" and component:IsA("GuiObject") then
+                            component.Visible = shouldBeVisible
+                        end
+                    end
+                end
+                if shouldBeVisible then
                     esp.SetColor(shared.ESPColors[category])
                 end
             end)
         end
     end
 end)
+
 
 workspace.ChildAdded:Connect(CheckInstance)
 for _, v in ipairs(workspace:GetChildren()) do task.spawn(CheckInstance, v) end
