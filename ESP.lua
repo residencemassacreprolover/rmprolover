@@ -86,6 +86,7 @@ task.spawn(function()
         for model, esp in pairs(ActiveESP) do
             pcall(function()
                 if not model or not model.Parent or not model.PrimaryPart then 
+                    if esp.Destroy then esp.Destroy() end
                     ActiveESP[model] = nil
                     return 
                 end
@@ -93,17 +94,14 @@ task.spawn(function()
                 local player = game.Players:GetPlayerFromCharacter(model)
                 local category = ESP_REGISTRY[model.Name] or (player and "Player")
                 
+                -- The single source of truth , quelle suprise.
                 local shouldBeVisible = shared.ESPEnabled and (category and shared.ESPCategories[category])
+
                 esp.SetVisible(shouldBeVisible)
 
-                -- eaht does this even mean?????
-                if esp.Drawings then
-                    for _, drawing in pairs(esp.Drawings) do
-                        drawing.Visible = shouldBeVisible
-                    end
-                end
-
-                -- Colors
+                -- Brute-force turn off the library's lines and arrows bc idfk how it works bro
+                if esp.Tracer then esp.Tracer.Enabled = shouldBeVisible and shared.ESPSettings.Tracers end
+                if esp.Arrow then esp.Arrow.Enabled = shouldBeVisible end
                 if shouldBeVisible then
                     esp.SetColor(shared.ESPColors[category])
                 end
@@ -111,7 +109,6 @@ task.spawn(function()
         end
     end
 end)
-
 
 workspace.ChildAdded:Connect(CheckInstance)
 for _, v in ipairs(workspace:GetChildren()) do task.spawn(CheckInstance, v) end
