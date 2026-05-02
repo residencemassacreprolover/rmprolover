@@ -126,9 +126,17 @@ task.spawn(function()
     end
 end)
 
-workspace.ChildAdded:Connect(CheckInstance)
-for _, v in ipairs(workspace:GetChildren()) do task.spawn(CheckInstance, v) end
-for _, p in ipairs(game.Players:GetPlayers()) do ApplyPlayerESP(p) end
+workspace.DescendantAdded:Connect(CheckInstance)
+
+for _, v in ipairs(workspace:GetDescendants()) do 
+    task.spawn(CheckInstance, v) 
+end
+
+for _, p in ipairs(game.Players:GetPlayers()) do 
+    ApplyPlayerESP(p) 
+end
+
 game.Players.PlayerAdded:Connect(ApplyPlayerESP)
 
 print("Ms-ESP fully init")
+
