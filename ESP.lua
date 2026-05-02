@@ -1,5 +1,5 @@
 --// Huge Thanks To MSPAINT for lots of pre built logic!! although modified by rmprolover \\--
-shared.ESPEnabled = true
+shared.ESPEnabled = false
 shared.ESPSettings = {
     TextSize = 16,
     MaxDistance = 2500,
@@ -15,11 +15,11 @@ shared.ESPColors = {
 }
 
 shared.ESPCategories = {
-    Mutant = true,
-    Zombie = true,
-    Items = true,
-    Objectives = true,
-    Player = true
+    Mutant = false,
+    Zombie = false,
+    Items = false,
+    Objectives = false,
+    Player = false
 }
 
 local ESPLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/source.lua"))()
