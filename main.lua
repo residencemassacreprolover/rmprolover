@@ -335,7 +335,7 @@ local tpwalkToggle = bypassGB:AddToggle("TPWalk", {
                     local delta = RunService.Heartbeat:Wait()
 
                     if hum.MoveDirection.Magnitude > 0 then
-                        char:TranslateBy(hum.MoveDirection * tpwalkSpeed * delta * 10)
+                        char:TranslateBy(hum.MoveDirection * Options.TPWalkSpeed.Value * delta * 10)
                     end
 
                     if player.Character ~= char then
@@ -360,11 +360,7 @@ bypassGB:AddSlider("TPWalkSpeed", {
     Default = 2,
     Min = 1,
     Max = 6,
-    Rounding = 0,
-    Suffix = "Studs/s",
-    Callback = function(Value)
-    tpwalkSpeed = value
-    end
+    Rounding = 0
 })
 
 
