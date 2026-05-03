@@ -29,4 +29,6 @@ TestSection:AddToggle("TestToggle", {
 })
 
 shared.Notify("Night 1 logic initialized!")
+shared.Load("Tabs", "Player")
+
 
