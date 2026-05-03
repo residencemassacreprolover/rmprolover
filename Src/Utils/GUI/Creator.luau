@@ -1,5 +1,13 @@
 local UICreator = {}
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/Library.lua"))()
+
+local libSuccess, Library = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/Library.lua"))()
+end)
+
+if not libSuccess or not Library then
+    warn("[Creator] Library failed to load")
+    return nil
+end
 
 shared.Library = Library
 shared.Options = Library.Options
@@ -132,4 +140,3 @@ function UICreator:CreateSettingsTab()
 end
 
 return UICreator
-
