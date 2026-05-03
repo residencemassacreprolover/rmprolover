@@ -26,6 +26,7 @@ else
 end
 
 --// Load the main script
+loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/Utils/DebugOverlay.lua"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/main.lua"))()
 
 getgenv().mspaint_loaded = true
