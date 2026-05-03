@@ -1,3 +1,4 @@
+print("Test!!!")
 local cloneref = (cloneref or function(instance: any) return instance end)
 
 local Services = {}
