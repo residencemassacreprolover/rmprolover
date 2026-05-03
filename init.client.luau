@@ -6,33 +6,41 @@ getgenv().mspaint_loading = true
 --// Loading Wait \\--
 if not game:IsLoaded() then game.Loaded:Wait() end
 
-
 --// Services \\--
-local Services = require("./Utils/Services")
-if Services then print("Services Required success")
-Services:GetServices({
-    "Players",
-    "UserInputService",
-    "TextChatService",
-    "ProximityPromptService",
-    "PathfindingService",
+local success, Services = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/Utils/Services.luau"))()
+end)
 
-    "CoreGui",
-    "StarterGui",
+if success and Services then
+    print("Services Required success")
+    Services:GetServices({
+        "Players",
+        "UserInputService",
+        "TextChatService",
+        "ProximityPromptService",
+        "PathfindingService",
 
-    "Workspace",
-    "Lighting",
-    "ReplicatedStorage",
+        "CoreGui",
+        "StarterGui",
 
-    "HttpService",
-    "RunService",
-    "SoundService",
-    "TeleportService",
-    "TweenService",
-    "MarketplaceService"
-})
+        "Workspace",
+        "Lighting",
+        "ReplicatedStorage",
 
+        "HttpService",
+        "RunService",
+        "SoundService",
+        "TeleportService",
+        "TweenService",
+        "MarketplaceService"
+    })
+else
+    print("Services Load Failed: " .. tostring(Services))
+    getgenv().mspaint_loading = false
+    return
+end
 
+--// Main Script \\--
 loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/main.lua"))()
 
 getgenv().mspaint_loaded = true
