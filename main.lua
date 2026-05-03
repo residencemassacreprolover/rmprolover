@@ -434,19 +434,19 @@ local brightnessConn, shadowsConn, fogStartConn, fogEndConn
 
 EspGB:AddToggle("Fullbright", {
     Text = "FullBright",
-    Default = true,
+    Default = false,
     Tooltip = "Yo its fb"
 })
 
 EspGB:AddToggle("NoFog", {
     Text = "No Fog",
-    Default = true,
+    Default = false,
     Tooltip = "Yo its fb"
 })
 
 EspGB:AddToggle("AntiLag", {
     Text = "AntiLag",
-    Default = true,
+    Default = false,
     Tooltip = "Yo its fb"
 })
 
