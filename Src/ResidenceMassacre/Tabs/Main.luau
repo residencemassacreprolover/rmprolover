@@ -48,17 +48,27 @@ ExploitGB:AddButton({
 --// Disable Blizzard 
 local blizzard = gameState and gameState:FindFirstChild("Blizzard")
 
-local blizzardToggle = ExploitGB:AddToggle("DisableBlizzardToggle", {
+local blizzardtoggle = ExploitGB:AddToggle("DisableBlizzardToggle", {
     Text = "Disable Blizzard",
     Default = false,
-    Tooltip = "Blizzard Modifier Must be On!",
+    DisabledTooltip = "The Blizzard Modifier must be On", 
     Callback = function(Value)
-        if blizzard and blizzard:IsA("BoolValue") then
-            blizzard.Value = not Value
-            Library:Notify(Value and "Blizzard disabled" or "Blizzard re-enabled", 2)
-        else
-            Library:Notify("Blizzard value not found in GameState", 3)
+        if not (blizzard and blizzard:IsA("BoolValue")) then
+            Library:Notify({
+                Title = "Uh Oh!",
+                Description = "Blizzard not found",
+                Duration = 3
+            })
+            return
         end
+
+        blizzard.Value = not Value
+
+        Library:Notify({
+            Title = "Blizzard",
+            Description = Value and "Blizzard disabled" or "Blizzard re-enabled",
+            Duration = 2
+        })
     end
 })
 
