@@ -7,6 +7,7 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/Library.lua"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/ESP.lua"))()
 local Options = Library.Options
+local Toggles = Library.Toggles
 -- Loading Screen
 local Loading = Library:CreateLoading({
     Title = "Residence Massacre Paint-d",
@@ -424,3 +425,97 @@ local enablePlayerESP = EspGB:AddToggle("PlayerESP", {
         shared.ESPCategories.Player = Value
     end
 })
+
+
+local Lighting = shared.Lighting
+local LastBrightness = Lighting.Brightness
+local LastShadows = Lighting.GlobalShadows
+local brightnessConn, shadowsConn, fogStartConn, fogEndConn
+
+EspGB:AddToggle("Fullbright", {
+    Text = "FullBright",
+    Default = true,
+    Tooltip = "Yo its fb"
+})
+
+EspGB:AddToggle("NoFog", {
+    Text = "No Fog",
+    Default = true,
+    Tooltip = "Yo its fb"
+})
+
+EspGB:AddToggle("AntiLag", {
+    Text = "AntiLag",
+    Default = true,
+    Tooltip = "Yo its fb"
+})
+
+Toggles.Fullbright:OnChanged(function(value)
+    if value then
+        LastBrightness = Lighting.Brightness
+        LastShadows = Lighting.GlobalShadows
+        Lighting.Brightness = 2
+        Lighting.GlobalShadows = false
+        
+        brightnessConn = Lighting:GetPropertyChangedSignal("Brightness"):Connect(function()
+            if Lighting.Brightness ~= 2 then Lighting.Brightness = 2 end
+        end)
+        
+        shadowsConn = Lighting:GetPropertyChangedSignal("GlobalShadows"):Connect(function()
+            if Lighting.GlobalShadows ~= false then Lighting.GlobalShadows = false end
+        end)
+    else
+        if brightnessConn then brightnessConn:Disconnect() end
+        if shadowsConn then shadowsConn:Disconnect() end
+        Lighting.Brightness = LastBrightness
+        Lighting.GlobalShadows = LastShadows
+    end
+end)
+
+Toggles.NoFog:OnChanged(function(value)
+    local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
+    if value then
+        if not Lighting:GetAttribute("OrigFogStart") then Lighting:SetAttribute("OrigFogStart", Lighting.FogStart) end
+        if not Lighting:GetAttribute("OrigFogEnd") then Lighting:SetAttribute("OrigFogEnd", Lighting.FogEnd) end
+        
+        Lighting.FogStart = 0
+        Lighting.FogEnd = math.huge
+        if atmosphere then atmosphere.Density = 0 end
+
+        fogStartConn = Lighting:GetPropertyChangedSignal("FogStart"):Connect(function()
+            if Lighting.FogStart ~= 0 then Lighting.FogStart = 0 end
+        end)
+        
+        fogEndConn = Lighting:GetPropertyChangedSignal("FogEnd"):Connect(function()
+            if Lighting.FogEnd ~= math.huge then Lighting.FogEnd = math.huge end
+        end)
+    else
+        if fogStartConn then fogStartConn:Disconnect() end
+        if fogEndConn then fogEndConn:Disconnect() end
+        Lighting.FogStart = Lighting:GetAttribute("OrigFogStart") or 0
+        Lighting.FogEnd = Lighting:GetAttribute("OrigFogEnd") or 100000
+        if atmosphere then atmosphere.Density = 0.395 end
+    end
+end)
+
+Toggles.AntiLag:OnChanged(function(value)
+    for _, object in pairs(workspace:GetDescendants()) do
+        if object:IsA("BasePart") then
+            if value then
+                if not object:GetAttribute("OrigMat") then object:SetAttribute("OrigMat", object.Material.Name) end
+                object.Material = Enum.Material.Plastic
+                object.Reflectance = 0
+            else
+                object.Material = Enum.Material[object:GetAttribute("OrigMat") or "Plastic"]
+            end
+        elseif object:IsA("Decal") or object:IsA("Texture") then
+            object.Transparency = value and 1 or 0
+        end
+    end
+    
+    local terrain = workspace:FindFirstChildOfClass("Terrain")
+    if terrain then
+        terrain.WaterReflectance = value and 0 or 1
+        terrain.WaterWaveSize = value and 0 or 0.05
+    end
+end)
