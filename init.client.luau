@@ -8,6 +8,7 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 
 --// Services \\--
 local Services = require("Utils/Services.luau")
+if Services then print("Services Required success")
 Services:GetServices({
     "Players",
     "UserInputService",
