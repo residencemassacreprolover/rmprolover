@@ -121,18 +121,6 @@ function UICreator:CreateSettingsTab()
     })
 
     local MenuSection = SettingsTab:AddLeftGroupbox("Menu")
-    
-    MenuSection:AddKeyPicker("MenuKeybind", {
-        Default = "RightShift",
-        NoUI = false,
-        Text = "Menu Bind"
-    })
-
-    MenuSection:AddToggle("ExecuteOnTeleport", {
-        Text = "Auto-Execute on Teleport",
-        Default = false
-    })
-
     MenuSection:AddButton({
         Text = "Unload Script",
         Func = function() Library:Unload() end
