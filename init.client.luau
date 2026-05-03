@@ -7,7 +7,7 @@ getgenv().mspaint_loading = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 --// Services \\--
-local Services = require("Utils/Services")
+local Services = require("Utils/Services.luau")
 Services:GetServices({
     "Players",
     "UserInputService",
