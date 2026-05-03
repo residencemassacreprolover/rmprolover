@@ -10,9 +10,9 @@ local Options = Library.Options
 local Toggles = Library.Toggles
 -- Loading Screen
 local Loading = Library:CreateLoading({
-    Title = "Residence Massacre Paint-d",
+    Title = "RMPL",
     Icon = 95816097006870,
-    TotalSteps = 6
+    TotalSteps = 4
 })
  
 -- Loading...
@@ -32,7 +32,7 @@ Loading.Sidebar:AddLabel("Enjoy Your stay.")
 task.wait(2)
  
 Loading:SetCurrentStep(3)
-Loading:SetDescription("the end is never the end is never the end is never the end is never the end")
+Loading:SetDescription("WE, YES WE, LOVE RESIDENCE MASSACRE")
 task.wait(0.5)
  
 Loading:SetCurrentStep(4)
@@ -43,8 +43,8 @@ Loading:Continue() -- Destroys the loader and opens the main window
 
 
 local Window = Library:CreateWindow({
-    Title = "Residence Massacre",
-    Footer = "version: example",
+    Title = "RMPL",
+    Footer = "testing ver expect lots of bugs! testing ver expect lots of bugs!",
     Icon = 95816097006870,
     NotifySide = "Right",
 })
