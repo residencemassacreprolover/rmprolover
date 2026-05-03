@@ -519,3 +519,13 @@ Toggles.AntiLag:OnChanged(function(value)
         terrain.WaterWaveSize = value and 0 or 0.05
     end
 end)
+
+
+EspGB:AddToggle("DebugOverlay", {
+    Text = "Debug Overlay",
+    Default = true,
+    Tooltip = "Yo its fb",
+    Callback = function(Value)
+        _G.DebugMenuEnabled = Value
+    end
+})
