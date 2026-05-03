@@ -1,46 +1,31 @@
-if getgenv().mspaint_loading then print("[mspaint] Loading stopped. (ERROR: Loading)"); return end
-if getgenv().mspaint_loaded then print("[mspaint] Loading stopped. (ERROR: Already loaded)"); return end
-
+if getgenv().mspaint_loading then return end
+if getgenv().mspaint_loaded then return end
 getgenv().mspaint_loading = true
 
---// Loading Wait \\--
 if not game:IsLoaded() then game.Loaded:Wait() end
 
---// Services \\--
-local success, Services = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/Utils/Services.luau"))()
+--// Force fetch the Services module and put it in the GLOBAL environment
+local url = "https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/Utils/Services.luau?t=" .. tick()
+local success, result = pcall(function()
+    return loadstring(game:HttpGet(url))()
 end)
 
-if success and Services then
-    print("Services Required success")
-    Services:GetServices({
-        "Players",
-        "UserInputService",
-        "TextChatService",
-        "ProximityPromptService",
-        "PathfindingService",
-
-        "CoreGui",
-        "StarterGui",
-
-        "Workspace",
-        "Lighting",
-        "ReplicatedStorage",
-
-        "HttpService",
-        "RunService",
-        "SoundService",
-        "TeleportService",
-        "TweenService",
-        "MarketplaceService"
+if success and result then
+    getgenv().Services = result -- ??
+    getgenv().Services:GetServices({
+        "Players", "UserInputService", "TextChatService", "ProximityPromptService",
+        "PathfindingService", "CoreGui", "StarterGui", "Workspace", "Lighting",
+        "ReplicatedStorage", "HttpService", "RunService", "SoundService",
+        "TeleportService", "TweenService", "MarketplaceService"
     })
+    print("Services Initialized")
 else
-    print("Services Load Failed: " .. tostring(Services))
+    warn("Failed to initialize Services: " .. tostring(result))
     getgenv().mspaint_loading = false
     return
 end
 
---// Main Script \\--
+--// Load the main script
 loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprolover/rmprolover/refs/heads/main/main.lua"))()
 
 getgenv().mspaint_loaded = true
