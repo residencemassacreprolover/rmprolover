@@ -15,7 +15,7 @@ shared.Toggles = Library.Toggles
 
 function UICreator:CreateWindow()
     local Loading = Library:CreateLoading({
-        Title = "Residence Massacre Paint-d",
+        Title = "RMPL",
         Icon = 95816097006870,
         TotalSteps = 5
     })
@@ -35,7 +35,7 @@ function UICreator:CreateWindow()
     task.wait(1)
 
     Loading:SetCurrentStep(3)
-    Loading:SetDescription("the end is never the end is never the end is never the end")
+    Loading:SetDescription("I LOVE RESIDENCE MASSACRE")
     task.wait(0.5)
 
     Loading:SetCurrentStep(4)
@@ -46,8 +46,8 @@ function UICreator:CreateWindow()
     Loading:Continue()
 
     local Window = Library:CreateWindow({
-        Title = "Residence Massacre",
-        Footer = "version: example",
+        Title = "RMPL",
+        Footer = "Test Version, Expect Bugs",
         Icon = 95816097006870,
         NotifySide = "Right",
     })
@@ -74,16 +74,16 @@ function UICreator:CreateWindow()
 
     account:AddButton({
         Text = "Script Dashboard",
-        Func = function() print("Dashboard clicked") end
+        Func = function() setclipboard("https://www.mspaint.cc/subscription-dashboard") end
     })
 
     local dc = account:AddButton({
         Text = "Main Discord",
-        Func = function() setclipboard("https://discord.gg/yourlink") end
+        Func = function() setclipboard("https://discord.gg/mspaint") end
     })
     dc:AddButton({
         Text = "Support Discord",
-        Func = function() setclipboard("https://discord.gg/yourlink") end
+        Func = function() setclipboard("https://mspaint.cc/support/") end
     })
 
     local status = hometab:AddRightTabbox("ScriptStatus")
@@ -95,10 +95,11 @@ function UICreator:CreateWindow()
 
     status1:AddButton({
         Text = "Copy Link",
-        Func = function() setclipboard("https://dashboard.link") end
+        Func = function() setclipboard("https://www.mspaint.cc/subscription-dashboard") end
     })
 
     local status2 = status:AddTab("Key Info")
+    status2:AddDivider()
     status2:AddLabel("Time Left: Lifetime", true)
     status2:AddLabel("Total Executions: nil", true)
     status2:AddLabel("Discord: nil", true)
