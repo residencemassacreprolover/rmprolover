@@ -75,7 +75,6 @@ local blizzardtoggle = ExploitGB:AddToggle("DisableBlizzardToggle", {
 
 blizzardtoggle:SetDisabled(not blizzard.Value)
 
-local S = shared.Services
 local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
 
 local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
@@ -88,13 +87,32 @@ local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
 
 TrollingGB:AddButton({
     Text = "Kill Selected",
-    Callback = function()
+    Func = function()
         local targetName = PlayerSelector.Value
-       shared.Library:Notify("Killed: " .. targetName, 2)
-        local targetPlayer = S.Players:FindFirstChild(targetName)
-        shared.Library:Notify("Killed: " .. targetPlayer, 2)
-        local remote = S.ReplicatedStorage:FindFirstChild("Remotes"):FindFirstChild("PlayerMutant")
-        shared.Library:Notify("Killed: " .. remote, 2)        
-                
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        
+        local targetPlayer = Players:FindFirstChild(targetName)
+        
+        if targetPlayer then
+            local remotesFolder = ReplicatedStorage:FindFirstChild("Remotes")
+            if remotesFolder then
+                local remote = remotesFolder:FindFirstChild("PlayerMutant")
+                if remote then
+                    local args = {
+                        "Kill",
+                        targetPlayer
+                    }
+                    remote:FireServer(unpack(args))
+                    shared.Library:Notify("Killed: " .. targetName, 2)
+                else
+                    shared.Library:Notify("Remote 'PlayerMutant' missing", 3)
+                end
+            else
+                shared.Library:Notify("Folder 'Remotes' missing", 3)
+            end
+        else
+            shared.Library:Notify("Select a player first", 3)
+        end
     end
 })
