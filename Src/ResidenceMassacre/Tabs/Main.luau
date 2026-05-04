@@ -78,27 +78,35 @@ blizzardtoggle:SetDisabled(not blizzard.Value)
 local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
 
 local S = shared.Services
-local remote = S.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("PlayerMutant")
+local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
 
-TrollingGB:AddDropdown("PlayerTarget", {
+local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
     Text = "Select a Player",
     SpecialType = "Player", 
     ExcludeLocalPlayer = false,
     EnablePlayerImages = true, 
-    Tooltip = "FE, Select a Player To Kill",
+    Tooltip = "Select a Player To Kill",
 })
 
 TrollingGB:AddButton({
     Text = "Kill Selected",
     Func = function()
-        local targetName = shared.Options.PlayerTarget.Value
-        local targetPlayer = S.Players:FindFirstChild(targetName)
+        local targetName = PlayerSelector.Value
         
-        if targetPlayer then
-            remote:FireServer("Kill", targetPlayer)
-            shared.Library:Notify("Sent 'Kill' to: " .. targetName, 2)
+        if targetName and targetName ~= "" then
+            local targetPlayer = S.Players:FindFirstChild(targetName)
+            
+            if targetPlayer then
+                local remote = S.ReplicatedStorage:FindFirstChild("Remotes"):FindFirstChild("PlayerMutant")
+                if remote then
+                    remote:FireServer("Kill", targetPlayer)
+                    shared.Library:Notify("Sent 'Kill' to: " .. targetName, 2)
+                end
+            else
+                shared.Library:Notify("Target player not found", 3)
+            end
         else
-            shared.Library:Notify("No target selected!", 2)
+            shared.Library:Notify("Select a player first", 3)
         end
     end
 })
