@@ -75,7 +75,7 @@ local blizzardtoggle = ExploitGB:AddToggle("DisableBlizzardToggle", {
 
 blizzardtoggle:SetDisabled(not blizzard.Value)
 
-local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
+local TrollingGB = MainTab:AddRightGroupbox("Trolling")
 
 -- pain in the ass but it finally worked
 local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
@@ -144,6 +144,35 @@ TrollingGB:AddButton({
             shared.Library:Notify("Trap spawned on " .. targetName, 2)
         else
             shared.Library:Notify("Target invalid or has no character", 3)
+        end
+    end
+})
+
+local trapLoop = false
+
+TrollingGB:AddToggle("FollowTrap", {
+    Text = "Trap Follow Player",
+    Default = false,
+    Risky = true,
+    Tooltip = "Could Cause Intense Lag (FE)",
+    Callback = function(Value)
+        trapLoop = Value
+        if Value then
+            task.spawn(function()
+                local Players = game:GetService("Players")
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local remote = ReplicatedStorage.Remotes.PlayerMutant
+
+                while trapLoop do
+                    local selected = PlayerSelector.Value
+                    local targetPlayer = Players:FindFirstChild(tostring(selected))
+
+                    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        remote:FireServer("Trap", targetPlayer.Character.HumanoidRootPart.CFrame)
+                    end
+                    task.wait(0.5)
+                end
+            end)
         end
     end
 })
