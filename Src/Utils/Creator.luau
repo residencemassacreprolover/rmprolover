@@ -126,7 +126,8 @@ function UICreator:CreateSettingsTab()
         Text = "Unload Script",
         Func = function() Library:Unload() end
     })
-MenuSection:AddLabel("Menu bind"):AddKeyPicker("MenuKeybind", {
+    local menubindlabel = MenuSection:AddLabel("Menu bind")
+    menubindlabel:AddKeyPicker("MenuKeybind", {
     Default = "RightShift",
     NoUI = true,
     Text = "Menu keybind",
