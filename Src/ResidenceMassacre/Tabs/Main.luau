@@ -75,7 +75,6 @@ local blizzardtoggle = ExploitGB:AddToggle("DisableBlizzardToggle", {
 
 blizzardtoggle:SetDisabled(not blizzard.Value)
 
-local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
 
 local S = shared.Services
 local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
