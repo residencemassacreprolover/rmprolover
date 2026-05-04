@@ -83,7 +83,7 @@ local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
     SpecialType = "Player", 
     ExcludeLocalPlayer = false,
     EnablePlayerImages = true, 
-    Tooltip = "Select a Player To Kill",
+    Tooltip = "Select a Player To Troll",
 })
 
 TrollingGB:AddButton({
@@ -104,6 +104,46 @@ TrollingGB:AddButton({
             end
         else
             shared.Library:Notify("Player not found in game", 3)
+        end
+    end
+})
+
+
+TrollingGB:AddButton({
+    Text = "Spawn Trap On Self",
+    Func = function()
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local LocalPlayer = Players.LocalPlayer
+        
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local remote = ReplicatedStorage.Remotes.PlayerMutant
+            local myPos = LocalPlayer.Character.HumanoidRootPart.CFrame
+            
+            remote:FireServer("Trap", myPos)
+            shared.Library:Notify("Trap spawned at self", 2)
+        end
+    end
+})
+
+TrollingGB:AddButton({
+    Text = "Spawn Trap On Player",
+    Func = function()
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        
+        local selected = PlayerSelector.Value
+        local targetName = tostring(selected)
+        local targetPlayer = Players:FindFirstChild(targetName)
+        
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local remote = ReplicatedStorage.Remotes.PlayerMutant
+            local targetPos = targetPlayer.Character.HumanoidRootPart.CFrame
+            
+            remote:FireServer("Trap", targetPos)
+            shared.Library:Notify("Trap spawned on " .. targetName, 2)
+        else
+            shared.Library:Notify("Target invalid or has no character", 3)
         end
     end
 })
