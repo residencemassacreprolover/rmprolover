@@ -1,6 +1,7 @@
 local Window = shared.Window
 local Library = shared.Library
 
+
 local MainTab = Window:AddTab({
     Name = "Main",
     Icon = "zap"
@@ -73,3 +74,31 @@ local blizzardtoggle = ExploitGB:AddToggle("DisableBlizzardToggle", {
 })
 
 blizzardtoggle:SetDisabled(not blizzard.Value)
+
+local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
+
+local S = shared.Services
+local remote = S.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("PlayerMutant")
+
+TrollingGB:AddDropdown("PlayerTarget", {
+    Text = "Select a Player",
+    SpecialType = "Player", 
+    ExcludeLocalPlayer = false,
+    EnablePlayerImages = true, 
+    Tooltip = "FE, Select a Player To Kill",
+})
+
+TrollingGB:AddButton({
+    Text = "Kill Selected",
+    Func = function()
+        local targetName = shared.Options.PlayerTarget.Value
+        local targetPlayer = S.Players:FindFirstChild(targetName)
+        
+        if targetPlayer then
+            remote:FireServer("Kill", targetPlayer)
+            shared.Library:Notify("Sent 'Kill' to: " .. targetName, 2)
+        else
+            shared.Library:Notify("No target selected!", 2)
+        end
+    end
+})
