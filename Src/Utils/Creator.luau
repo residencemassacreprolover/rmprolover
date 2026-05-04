@@ -127,5 +127,12 @@ function UICreator:CreateSettingsTab()
         Func = function() Library:Unload() end
     })
 end
+MenuGroup:AddLabel("Menu bind"):AddKeyPicker("MenuKeybind", {
+    Default = "RightShift",
+    NoUI = true,
+    Text = "Menu keybind",
+    Callback = function(Value) Library.ToggleKeybind = Options.MenuKeybind end
+})
+
 
 return UICreator
