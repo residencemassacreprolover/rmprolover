@@ -88,7 +88,7 @@ local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
 
 TrollingGB:AddButton({
     Text = "Kill Selected",
-    Func = function()
+    Callback = function()
         local targetName = PlayerSelector.Value
         local targetPlayer = S.Players:FindFirstChild(targetName)
         
