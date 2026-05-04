@@ -91,19 +91,13 @@ TrollingGB:AddButton({
         local targetName = PlayerSelector.Value
         local Players = game:GetService("Players")
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        
-        local targetPlayer = Players:FindFirstChild(targetName)
-        
-        if targetPlayer then
+        if targetName and targetName ~= "" then
             local remotesFolder = ReplicatedStorage:FindFirstChild("Remotes")
             if remotesFolder then
                 local remote = remotesFolder:FindFirstChild("PlayerMutant")
                 if remote then
-                    local args = {
-                        "Kill",
-                        targetPlayer
-                    }
-                    remote:FireServer(unpack(args))
+                    -- Testing with string name as Arg #2 instead of the Player Object bc i think it works?
+                    remote:FireServer("Kill", targetName)
                     shared.Library:Notify("Killed: " .. targetName, 2)
                 else
                     shared.Library:Notify("Remote 'PlayerMutant' missing", 3)
