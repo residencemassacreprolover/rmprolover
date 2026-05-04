@@ -90,25 +90,11 @@ TrollingGB:AddButton({
     Text = "Kill Selected",
     Callback = function()
         local targetName = PlayerSelector.Value
+       shared.Library:Notify("Killed: " .. targetName, 2)
         local targetPlayer = S.Players:FindFirstChild(targetName)
-        
-        if targetPlayer then
-            local remote = S.ReplicatedStorage:FindFirstChild("Remotes"):FindFirstChild("PlayerMutant")
-            
-            if remote then
-                -- Matching your exact argument structure
-                local args = {
-                    "Kill",
-                    targetPlayer
-                }
-                remote:FireServer(unpack(args))
+        shared.Library:Notify("Killed: " .. targetPlayer, 2)
+        local remote = S.ReplicatedStorage:FindFirstChild("Remotes"):FindFirstChild("PlayerMutant")
+        shared.Library:Notify("Killed: " .. remote, 2)        
                 
-                shared.Library:Notify("Killed: " .. targetName, 2)
-            else
-                shared.Library:Notify("Remote not found", 3)
-            end
-        else
-            shared.Library:Notify("Select a valid player", 3)
-        end
     end
 })
