@@ -84,7 +84,7 @@ local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
     SpecialType = "Player", 
     ExcludeLocalPlayer = false,
     EnablePlayerImages = true, 
-    Tooltip = "Select a Player To Kill",
+    Tooltip = "Select a Player To Kill (test)",
 })
 
 TrollingGB:AddButton({
@@ -96,10 +96,19 @@ TrollingGB:AddButton({
             local targetPlayer = S.Players:FindFirstChild(targetName)
             
             if targetPlayer then
-                local remote = S.ReplicatedStorage:FindFirstChild("Remotes"):FindFirstChild("PlayerMutant")
-                if remote then
-                    remote:FireServer("Kill", targetPlayer)
-                    shared.Library:Notify("Sent 'Kill' to: " .. targetName, 2)
+                local remotesFolder = S.ReplicatedStorage:FindFirstChild("Remotes")
+                
+                if remotesFolder then
+                    local remote = remotesFolder:FindFirstChild("PlayerMutant")
+                    
+                    if remote then
+                        remote:FireServer("Kill", targetPlayer)
+                        shared.Library:Notify("Sent 'Kill' to: " .. targetName, 2)
+                    else
+                        shared.Library:Notify("Remote 'PlayerMutant' not found", 3)
+                    end
+                else
+                    shared.Library:Notify("Folder 'Remotes' not found", 3)
                 end
             else
                 shared.Library:Notify("Target player not found", 3)
