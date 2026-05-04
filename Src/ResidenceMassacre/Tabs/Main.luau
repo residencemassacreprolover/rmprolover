@@ -75,46 +75,40 @@ local blizzardtoggle = ExploitGB:AddToggle("DisableBlizzardToggle", {
 
 blizzardtoggle:SetDisabled(not blizzard.Value)
 
-
 local S = shared.Services
 local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
 
 local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
     Text = "Select a Player",
     SpecialType = "Player", 
-    ExcludeLocalPlayer = false,
+    ExcludeLocalPlayer = true,
     EnablePlayerImages = true, 
-    Tooltip = "Select a Player To Kill (test)",
+    Tooltip = "Select a Player To Kill",
 })
 
 TrollingGB:AddButton({
     Text = "Kill Selected",
     Func = function()
         local targetName = PlayerSelector.Value
+        local targetPlayer = S.Players:FindFirstChild(targetName)
         
-        if targetName and targetName ~= "" then
-            local targetPlayer = S.Players:FindFirstChild(targetName)
+        if targetPlayer then
+            local remote = S.ReplicatedStorage:FindFirstChild("Remotes"):FindFirstChild("PlayerMutant")
             
-            if targetPlayer then
-                local remotesFolder = S.ReplicatedStorage:FindFirstChild("Remotes")
+            if remote then
+                -- Matching your exact argument structure
+                local args = {
+                    "Kill",
+                    targetPlayer
+                }
+                remote:FireServer(unpack(args))
                 
-                if remotesFolder then
-                    local remote = remotesFolder:FindFirstChild("PlayerMutant")
-                    
-                    if remote then
-                        remote:FireServer("Kill", targetPlayer)
-                        shared.Library:Notify("Sent 'Kill' to: " .. targetName, 2)
-                    else
-                        shared.Library:Notify("Remote 'PlayerMutant' not found", 3)
-                    end
-                else
-                    shared.Library:Notify("Folder 'Remotes' not found", 3)
-                end
+                shared.Library:Notify("Killed: " .. targetName, 2)
             else
-                shared.Library:Notify("Target player not found", 3)
+                shared.Library:Notify("Remote not found", 3)
             end
         else
-            shared.Library:Notify("Select a player first", 3)
+            shared.Library:Notify("Select a valid player", 3)
         end
     end
 })
