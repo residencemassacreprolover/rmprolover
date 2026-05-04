@@ -81,7 +81,7 @@ local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
 local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
     Text = "Select a Player",
     SpecialType = "Player", 
-    ExcludeLocalPlayer = true,
+    ExcludeLocalPlayer = false,
     EnablePlayerImages = true, 
     Tooltip = "Select a Player To Kill",
 })
