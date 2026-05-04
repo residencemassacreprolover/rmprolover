@@ -77,6 +77,7 @@ blizzardtoggle:SetDisabled(not blizzard.Value)
 
 local TrollingGB = MainTab:AddLeftGroupbox("Trolling")
 
+-- pain in the ass but it finally worked
 local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
     Text = "Select a Player",
     SpecialType = "Player", 
@@ -88,25 +89,21 @@ local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
 TrollingGB:AddButton({
     Text = "Kill Selected",
     Func = function()
-        local targetName = PlayerSelector.Value
+        local selected = PlayerSelector.Value
+        local targetName = tostring(selected) 
+        
         local Players = game:GetService("Players")
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        if targetName and targetName ~= "" then
-            local remotesFolder = ReplicatedStorage:FindFirstChild("Remotes")
-            if remotesFolder then
-                local remote = remotesFolder:FindFirstChild("PlayerMutant")
-                if remote then
-                    -- Testing with string name as Arg #2 instead of the Player Object bc i think it works?
-                    remote:FireServer("Kill", targetName)
-                    shared.Library:Notify("Killed: " .. targetName, 2)
-                else
-                    shared.Library:Notify("Remote 'PlayerMutant' missing", 3)
-                end
-            else
-                shared.Library:Notify("Folder 'Remotes' missing", 3)
+        local targetPlayer = Players:FindFirstChild(targetName)
+        
+        if targetPlayer then
+            local remote = ReplicatedStorage:FindFirstChild("Remotes"):FindFirstChild("PlayerMutant")
+            if remote then
+                remote:FireServer("Kill", targetPlayer)
+                shared.Library:Notify("Sent Kill to " .. targetName, 2)
             end
         else
-            shared.Library:Notify("Select a player first", 3)
+            shared.Library:Notify("Player not found in game", 3)
         end
     end
 })
