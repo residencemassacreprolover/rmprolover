@@ -152,19 +152,33 @@ CharacterGB:AddSlider("TPWalkSpeed", {
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+
 local infBatteryLoop = false
+local originalBatteryValue = 100
 local originalBatteryUI = {}
+
+local function getFlashlightBattery()
+    local char = LocalPlayer.Character
+    local flash = char and char:FindFirstChild("Flashlight")
+    return flash and flash:FindFirstChild("Battery")
+end
 
 CharacterGB:AddToggle("InfBattery", {
     Text = "Infinite Flashlight",
     Default = false,
+    Tooltip = "Infinite Flashlight",
     Callback = function(Value)
         infBatteryLoop = Value
         
         local flashlightUI = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("FlashlightUI")
-        local batteryText = flashlightUI and flashlightUI.Battery:FindFirstChild("BatteryText")
+        local batteryText = flashlightUI and flashlightUI:FindFirstChild("Battery") and flashlightUI.Battery:FindFirstChild("BatteryText")
         
         if Value then
+            local batteryObj = getFlashlightBattery()
+            if batteryObj then
+                originalBatteryValue = batteryObj.Value
+            end
+            
             if batteryText then
                 originalBatteryUI.Text = batteryText.Text
                 originalBatteryUI.Visible = batteryText.Visible
@@ -179,21 +193,25 @@ CharacterGB:AddToggle("InfBattery", {
 
             task.spawn(function()
                 while infBatteryLoop do
-                    local char = LocalPlayer.Character
-                    local flash = char and char:FindFirstChild("Flashlight")
-                    
-                    if flash and flash:FindFirstChild("Battery") then
-                        flash.Battery.Value = 999999
+                    local currentBattery = getFlashlightBattery()
+                    if currentBattery then
+                        currentBattery.Value = 999999
                     end
                     
                     if batteryText then
                         batteryText.Text = "Infinite Battery"
                     end
-                    task.wait(0.5)
+                    task.wait(0.1)
                 end
             end)
+            
         else
-            if batteryText and originalBatteryUI.Text then
+            local currentBattery = getFlashlightBattery()
+            if currentBattery then
+                currentBattery.Value = originalBatteryValue
+            end
+            
+            if batteryText and originalBatteryUI.Text ~= nil then
                 batteryText.Text = originalBatteryUI.Text
                 batteryText.Visible = originalBatteryUI.Visible
                 batteryText.TextWrapped = originalBatteryUI.Wrapped
@@ -202,5 +220,3 @@ CharacterGB:AddToggle("InfBattery", {
         end
     end
 })
-
-
