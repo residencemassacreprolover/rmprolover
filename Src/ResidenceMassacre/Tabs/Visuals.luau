@@ -55,8 +55,8 @@ end
 local Lighting = game:GetService("Lighting")
 local WorldGB = VisualsTab:AddLeftGroupbox("World")
 
-local FB = WorldGB:AddToggle("Fullbright", { Text = "FullBright", Default = true, Tooltip = "Its, Full Bright.." })
-local NF = WorldGB:AddToggle("NoFog", { Text = "No Fog", Default = true, Tooltip = "No Fog" })
+local FB = WorldGB:AddToggle("Fullbright", { Text = "FullBright", Default = false, Tooltip = "Its, Full Bright.." })
+local NF = WorldGB:AddToggle("NoFog", { Text = "No Fog", Default = false, Tooltip = "No Fog" })
 local AL = WorldGB:AddToggle("AntiLag", { Text = "Anti-Lag", Default = false, Tooltip = "PotatoMan" })
 
 WorldGB:AddToggle("DebugOverlay", {
@@ -70,29 +70,45 @@ WorldGB:AddToggle("DebugOverlay", {
 
 local LastBrightness = Lighting.Brightness
 local LastShadows = Lighting.GlobalShadows
-local brightnessConn, shadowsConn
+local LastAmbient = Lighting.OutdoorAmbient
+local LastExposure = Lighting.ExposureCompensation
+
+local brightnessConn, shadowsConn, ambientConn, exposureConn
 
 FB:OnChanged(function()
     local value = FB.Value
     if value then
         LastBrightness = Lighting.Brightness
         LastShadows = Lighting.GlobalShadows
-        Lighting.Brightness = 2
-        Lighting.GlobalShadows = false
-        
-        brightnessConn = Lighting:GetPropertyChangedSignal("Brightness"):Connect(function()
-            if Lighting.Brightness ~= 2 then Lighting.Brightness = 2 end
-        end)
-        shadowsConn = Lighting:GetPropertyChangedSignal("GlobalShadows"):Connect(function()
-            if Lighting.GlobalShadows ~= false then Lighting.GlobalShadows = false end
-        end)
+        LastAmbient = Lighting.OutdoorAmbient
+        LastExposure = Lighting.ExposureCompensation
+
+        local function Apply()
+            Lighting.Brightness = 3
+            Lighting.GlobalShadows = false
+            Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+            Lighting.ExposureCompensation = 1
+        end
+
+        Apply()
+
+        brightnessConn = Lighting:GetPropertyChangedSignal("Brightness"):Connect(Apply)
+        shadowsConn = Lighting:GetPropertyChangedSignal("GlobalShadows"):Connect(Apply)
+        ambientConn = Lighting:GetPropertyChangedSignal("OutdoorAmbient"):Connect(Apply)
+        exposureConn = Lighting:GetPropertyChangedSignal("ExposureCompensation"):Connect(Apply)
     else
         if brightnessConn then brightnessConn:Disconnect() end
         if shadowsConn then shadowsConn:Disconnect() end
+        if ambientConn then ambientConn:Disconnect() end
+        if exposureConn then exposureConn:Disconnect() end
+        
         Lighting.Brightness = LastBrightness
         Lighting.GlobalShadows = LastShadows
+        Lighting.OutdoorAmbient = LastAmbient
+        Lighting.ExposureCompensation = LastExposure
     end
 end)
+
 
 
 local fogStartConn, fogEndConn
