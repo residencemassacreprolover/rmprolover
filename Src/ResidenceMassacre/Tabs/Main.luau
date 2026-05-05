@@ -176,3 +176,65 @@ TrollingGB:AddToggle("FollowTrap", {
         end
     end
 })
+
+TrollingGB:AddDivider()
+
+local lanternLoop = false
+local strobeLoop = false
+
+-- Helper to find the Lantern if it exists in game
+local function getLanternTool()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local char = LocalPlayer.Character
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    
+    return (char and char:FindFirstChild("Lantern")) or (backpack and backpack:FindFirstChild("Lantern"))
+end
+
+TrollingGB:AddButton({
+    Text = "Place Lantern on Player",
+    Tooltip = "Need to Have Lantern in Inventory",
+    Func = function()
+        local selected = PlayerSelector.Value
+        local targetPlayer = game.Players:FindFirstChild(tostring(selected))
+        local lantern = getLanternTool()
+        
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if lantern and lantern:FindFirstChild("Place") then
+                local targetPos = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3.2, 0)
+                lantern.Place:FireServer(targetPos)
+                shared.Library:Notify("Lantern placed on " .. targetPlayer.Name, 2)
+            else
+                shared.Library:Notify("Lantern Tool not found!", 3)
+            end
+        else
+            shared.Library:Notify("Target invalid or missing", 3)
+        end
+    end
+})
+
+TrollingGB:AddToggle("LoopLantern", {
+    Text = "Loop Place Lantern on Player",
+    Default = false,
+    Risky = true,
+    Tooltip = "Could Cause Intense Lag (FE)",
+    Callback = function(Value)
+        lanternLoop = Value
+        if Value then
+            task.spawn(function()
+                while lanternLoop do
+                    local selected = PlayerSelector.Value
+                    local targetPlayer = game.Players:FindFirstChild(tostring(selected))
+                    local lantern = getLanternTool()
+
+                    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") and lantern and lantern:FindFirstChild("Place") then
+                        local targetPos = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3.2, 0)
+                        lantern.Place:FireServer(targetPos)
+                    end
+                    task.wait(0.5)
+                end
+            end)
+        end
+    end
+})
