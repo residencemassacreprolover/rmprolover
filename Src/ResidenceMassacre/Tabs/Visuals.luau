@@ -13,11 +13,11 @@ local EspGB = VisualsTab:AddRightGroupbox("ESP")
 -- Initialize as fallback
 shared.ESPEnabled = shared.ESPEnabled or false
 shared.ESPCategories = shared.ESPCategories or {
-    Mutant = true,
+    Mutant = false,
     Zombie = false,
     Items = false,
     Objectives = false,
-    Player = true
+    Player = false
 }
 
 --// toggle masterswitc
@@ -34,11 +34,11 @@ EspGB:AddDivider()
 
 --// toggling loops bc its easier can't lie brochacho
 local Categories = {
-    { Text = "Mutant ESP", Key = "Mutant", Default = true },
+    { Text = "Mutant ESP", Key = "Mutant", Default = false },
     { Text = "Zombie ESP", Key = "Zombie", Default = false },
     { Text = "Items ESP", Key = "Items", Default = false },
     { Text = "Objectives ESP", Key = "Objectives", Default = false },
-    { Text = "Player ESP", Key = "Player", Default = true },
+    { Text = "Player ESP", Key = "Player", Default = false },
 }
 
 for _, cat in ipairs(Categories) do
