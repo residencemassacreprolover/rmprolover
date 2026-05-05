@@ -191,6 +191,18 @@ local function getLanternTool()
     
     return (char and char:FindFirstChild("Lantern")) or (backpack and backpack:FindFirstChild("Lantern"))
 end
+-- helper to pick already existing lanterns in workspace
+local function pickUpExistingLantern()
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == "Lantern" and obj:IsA("Model") then
+            local cd = obj:FindFirstChild("Handle") and obj.Handle:FindFirstChild("ClickDetector")
+            if cd then
+                fireclickdetector(cd)
+            end
+        end
+    end
+end
+-- most useless helpers oat
 
 TrollingGB:AddButton({
     Text = "Place Lantern on Player",
@@ -198,11 +210,14 @@ TrollingGB:AddButton({
     Func = function()
         local selected = PlayerSelector.Value
         local targetPlayer = game.Players:FindFirstChild(tostring(selected))
+        pickUpExistingLantern()
+        task.wait(0.1)
         local lantern = getLanternTool()
         
         if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
             if lantern and lantern:FindFirstChild("Place") then
-                local targetPos = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3.2, 0)
+                local head = targetPlayer.Character:FindFirstChild("Head") or targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+                local targetPos = head.CFrame * CFrame.new(0, 0, 0)
                 lantern.Place:FireServer(targetPos)
                 shared.Library:Notify("Lantern placed on " .. targetPlayer.Name, 2)
             else
@@ -224,12 +239,15 @@ TrollingGB:AddToggle("LoopLantern", {
         if Value then
             task.spawn(function()
                 while lanternLoop do
+                    pickUpExistingLantern()
+                    task.wait(0.1)
                     local selected = PlayerSelector.Value
                     local targetPlayer = game.Players:FindFirstChild(tostring(selected))
                     local lantern = getLanternTool()
 
                     if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") and lantern and lantern:FindFirstChild("Place") then
-                        local targetPos = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3.2, 0)
+                        local head = targetPlayer.Character:FindFirstChild("Head") or targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        local targetPos = head.CFrame * CFrame.new(0, 0, 0)
                         lantern.Place:FireServer(targetPos)
                         
                         -- Yoink
@@ -243,7 +261,7 @@ TrollingGB:AddToggle("LoopLantern", {
                             end
                         end
                     end
-                    task.wait(0.2)
+                    task.wait(0.15)
                 end
             end)
         end
