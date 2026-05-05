@@ -7,7 +7,7 @@ shared.ESPColors = shared.ESPColors or {
     Objectives = Color3.fromRGB(255, 200, 0),
     Player = Color3.fromRGB(255, 255, 255)
 }
-shared.ESPCategories = shared.ESPCategories or { Mutant = true, Zombie = true, Items = true, Objectives = true, Player = true }
+shared.ESPCategories = shared.ESPCategories or { Mutant = false, Zombie = false, Items = false, Objectives = false, Player = false }
 
 -- registry now defined By Night Loader Files
 shared.ESP_REGISTRY = shared.ESP_REGISTRY or {}
