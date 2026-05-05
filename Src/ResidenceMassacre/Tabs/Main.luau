@@ -231,8 +231,19 @@ TrollingGB:AddToggle("LoopLantern", {
                     if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") and lantern and lantern:FindFirstChild("Place") then
                         local targetPos = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3.2, 0)
                         lantern.Place:FireServer(targetPos)
+                        
+                        -- Yoink
+                        task.wait(0.1) 
+                        for _, obj in pairs(workspace:GetChildren()) do
+                            if obj.Name == "Lantern" and obj:IsA("Model") then
+                                local cd = obj:FindFirstChild("Handle") and obj.Handle:FindFirstChild("ClickDetector")
+                                if cd then
+                                    fireclickdetector(cd)
+                                end
+                            end
+                        end
                     end
-                    task.wait(0.5)
+                    task.wait(0.2)
                 end
             end)
         end
