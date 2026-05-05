@@ -150,3 +150,57 @@ CharacterGB:AddSlider("TPWalkSpeed", {
     Rounding = 0
 })
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local infBatteryLoop = false
+local originalBatteryUI = {}
+
+CharacterGB:AddToggle("InfBattery", {
+    Text = "Infinite Flashlight",
+    Default = false,
+    Callback = function(Value)
+        infBatteryLoop = Value
+        
+        local flashlightUI = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("FlashlightUI")
+        local batteryText = flashlightUI and flashlightUI.Battery:FindFirstChild("BatteryText")
+        
+        if Value then
+            if batteryText then
+                originalBatteryUI.Text = batteryText.Text
+                originalBatteryUI.Visible = batteryText.Visible
+                originalBatteryUI.Wrapped = batteryText.TextWrapped
+                originalBatteryUI.XAlign = batteryText.TextXAlignment
+                
+                batteryText.Visible = true
+                batteryText.TextWrapped = false
+                batteryText.TextXAlignment = Enum.TextXAlignment.Left
+                batteryText.Text = "Infinite Battery"
+            end
+
+            task.spawn(function()
+                while infBatteryLoop do
+                    local char = LocalPlayer.Character
+                    local flash = char and char:FindFirstChild("Flashlight")
+                    
+                    if flash and flash:FindFirstChild("Battery") then
+                        flash.Battery.Value = 999999
+                    end
+                    
+                    if batteryText then
+                        batteryText.Text = "Infinite Battery"
+                    end
+                    task.wait(0.5)
+                end
+            end)
+        else
+            if batteryText and originalBatteryUI.Text then
+                batteryText.Text = originalBatteryUI.Text
+                batteryText.Visible = originalBatteryUI.Visible
+                batteryText.TextWrapped = originalBatteryUI.Wrapped
+                batteryText.TextXAlignment = originalBatteryUI.XAlign
+            end
+        end
+    end
+})
+
+
