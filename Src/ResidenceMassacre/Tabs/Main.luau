@@ -93,7 +93,7 @@ TrollingGB:AddSlider("tickrate", {
     Default = 0.5,
     Min = 0,
     Max = 1,
-    Rounding = 0
+    Rounding = 3
 })
 
 
