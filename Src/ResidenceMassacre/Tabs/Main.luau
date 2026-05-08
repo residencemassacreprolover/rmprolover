@@ -86,6 +86,15 @@ local PlayerSelector = TrollingGB:AddDropdown("PlayerTarget", {
     Tooltip = "Select a Player To Troll",
 })
 
+TrollingGB:AddSlider("tickrate", {
+    Text = "Speed & Rate of The Loop",
+    Default = 0.5,
+    Min = 0,
+    Max = 1,
+    Rounding = 0
+})
+
+
 TrollingGB:AddButton({
     Text = "Kill Selected",
     Func = function()
@@ -170,7 +179,7 @@ TrollingGB:AddToggle("FollowTrap", {
                     if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
                         remote:FireServer("Trap", targetPlayer.Character.HumanoidRootPart.CFrame)
                     end
-                    task.wait(0.5)
+                    task.wait(Options.tickrate.Value)
                 end
             end)
         end
@@ -240,7 +249,7 @@ TrollingGB:AddToggle("LoopLantern", {
             task.spawn(function()
                 while lanternLoop do
                     pickUpExistingLantern()
-                    task.wait(0.1)
+                    task.wait(Options.tickrate.Value / 3)
                     local selected = PlayerSelector.Value
                     local targetPlayer = game.Players:FindFirstChild(tostring(selected))
                     local lantern = getLanternTool()
@@ -251,7 +260,7 @@ TrollingGB:AddToggle("LoopLantern", {
                         lantern.Place:FireServer(targetPos)
                         
                         -- Yoink
-                        task.wait(0.1) 
+                        task.wait(Options.tickrate.Value / 3) 
                         for _, obj in pairs(workspace:GetChildren()) do
                             if obj.Name == "Lantern" and obj:IsA("Model") then
                                 local cd = obj:FindFirstChild("Handle") and obj.Handle:FindFirstChild("ClickDetector")
@@ -261,7 +270,7 @@ TrollingGB:AddToggle("LoopLantern", {
                             end
                         end
                     end
-                    task.wait(0.15)
+                    task.wait(Options.tickrate.Value / 3)
                 end
             end)
         end
