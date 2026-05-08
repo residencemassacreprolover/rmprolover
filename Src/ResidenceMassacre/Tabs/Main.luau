@@ -355,8 +355,8 @@ AutoGB:AddButton({
                     end
                     task.wait(0.3)
                 end
+                shared.Library:Notify("Objectives Completed", 2)
             end)
-            shared.Library:Notify("Objectives Completed", 2)
         else
             shared.Library:Notify("Character root not found? How. Are you dead? seriously.", 2)
         end
