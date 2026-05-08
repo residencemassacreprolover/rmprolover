@@ -339,8 +339,13 @@ AutoGB:AddButton({
         local gameState = game:GetService("ReplicatedStorage"):FindFirstChild("GameState")
 
         if rootPart then
-            rootPart.CFrame = CFrame.new(-78.8697739, 2.68498135, -70.1440048, 1, 0, 0, 0, 1, 0, 0, 0, 1)
-            
+            rootPart.CFrame = CFrame.new(
+                -34.3541336, 7.79997444, -58.3701172, 
+                0.619202912, -3.47004629e-08, -0.785230994, 
+                5.68393368e-08, 1, 6.29901742e-10, 
+                0.785230994, -4.50220448e-08, 0.619202912
+            )
+
             shared.Library:Notify("Teleported! Firing Radio Clicks", 2)
 
             task.spawn(function()
@@ -350,8 +355,8 @@ AutoGB:AddButton({
                     end
                     task.wait(0.3)
                 end
-                shared.Library:Notify("Objectives Completed", 2)
             end)
+            shared.Library:Notify("Objectives Completed", 2)
         else
             shared.Library:Notify("Character root not found? How. Are you dead? seriously.", 2)
         end
