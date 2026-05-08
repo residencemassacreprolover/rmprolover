@@ -278,3 +278,50 @@ TrollingGB:AddToggle("LoopLantern", {
         end
     end
 })
+
+
+local AutoGB = MainTab:AddLeftGroupbox("Autos")
+local ClickWireRemote = remotes:WaitForChild("ClickWire")
+
+local function fixActiveWires()
+    local fuseBox = workspace:FindFirstChild("FuseBox")
+    if not fuseBox then return end
+    
+    local wiresFolder = fuseBox:FindFirstChild("Wires")
+    if not wiresFolder then return end
+
+    for i = 1, 4 do
+        local wire = wiresFolder:FindFirstChild(tostring(i))
+        if wire then
+            local sparkles = wire:FindFirstChild("Sparkles")
+            if sparkles and sparkles.Enabled then
+                ClickWireRemote:FireServer(wire)
+            end
+        end
+    end
+end
+
+AutoGB:AddButton({
+    Text = "Fix Wires",
+    Func = function()
+        fixActiveWires()
+    end
+})
+
+AutoGB:AddToggle("AutoWire", {
+    Text = "Auto Fix Wires",
+    Tooltip = "Automatically Fixes wires whenever they break",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoWire = Value
+        if Value then
+            task.spawn(function()
+                while _G.AutoWire do
+                    fixActiveWires()
+                    task.wait(0.5) -- Prevents firing the remote too fast and getting kicked
+                end
+            end)
+        end
+    end
+})
+
