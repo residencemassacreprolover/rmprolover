@@ -99,6 +99,8 @@ TrollingGB:AddSlider("tickrate", {
 
 TrollingGB:AddButton({
     Text = "Kill Selected",
+    Risky = true,
+    Tooltip = "Name of The Killer will be displayed in an Error On the Console for Everyone",
     Func = function()
         local selected = PlayerSelector.Value
         local targetName = tostring(selected) 
@@ -318,9 +320,40 @@ AutoGB:AddToggle("AutoWire", {
             task.spawn(function()
                 while _G.AutoWire do
                     fixActiveWires()
-                    task.wait(0.5) -- Prevents firing the remote too fast and getting kicked
+                    task.wait(0.5) 
                 end
             end)
+        end
+    end
+})
+
+AutoGB:AddButton({
+    Text = "Complete Objectives",
+    Tooltip = "Completes the two Starting Objectives of Night 1",
+    Func = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        local rootPart = character and character:FindFirstChild("HumanoidRootPart")
+        local radio = workspace:FindFirstChild("Radio")
+        local detector = radio and radio:FindFirstChild("ClickDetector")
+        local gameState = game:GetService("ReplicatedStorage"):FindFirstChild("GameState")
+
+        if rootPart then
+            rootPart.CFrame = CFrame.new(-78.8697739, 2.68498135, -70.1440048, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+            
+            shared.Library:Notify("Teleported! Firing Radio Clicks", 2)
+
+            task.spawn(function()
+                while gameState and not gameState.Active.Value do
+                    if detector then
+                        fireclickdetector(detector)
+                    end
+                    task.wait(0.3)
+                end
+                shared.Library:Notify("Objectives Completed", 2)
+            end)
+        else
+            shared.Library:Notify("Character root not found? How. Are you dead? seriously.", 2)
         end
     end
 })
