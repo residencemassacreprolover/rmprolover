@@ -92,7 +92,7 @@ TrollingGB:AddSlider("tickrate", {
     Text = "Speed & Rate of The Loop",
     Default = 0.5,
     Min = 0,
-    Max = 1,
+    Max = 2,
     Rounding = 3
 })
 
