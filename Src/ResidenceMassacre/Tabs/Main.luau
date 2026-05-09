@@ -365,8 +365,9 @@ AutoGB:AddButton({
 
 AutoGB:AddDivider()
 
-local FlashRemote = remotes:WaitForChild("FlashCam")
+local FlashEvent = remotes:WaitForChild("FlashCam")
 local CamerasFolder = workspace:WaitForChild("Cameras")
+local LocalPlayer = game:GetService("Players").LocalPlayer
 
 local selectedCamera = "1"
 
@@ -376,7 +377,7 @@ AutoGB:AddDropdown("CameraSelect", {
     Text = "Cameras",
     Tooltip = "Select Cameras For Flashing",
     Default = "1",
-    Options = {"1", "2", "3"},
+    Values = {"1", "2", "3"},
     Callback = function(Value)
         selectedCamera = Value
     end
@@ -388,7 +389,7 @@ AutoGB:AddButton({
     Func = function()
         local camObject = CamerasFolder:FindFirstChild(selectedCamera)
         if camObject then
-            FlashRemote:FireServer(0.0001, camObject)
+            firesignal(FlashEvent.OnClientEvent, LocalPlayer, 0.0001, camObject)
         else
             shared.Library:Notify("Camera not Setup!", 2)
         end
@@ -407,7 +408,7 @@ AutoGB:AddToggle("LoopFlashAll", {
                     for i = 1, 3 do
                         local camObject = CamerasFolder:FindFirstChild(tostring(i))
                         if camObject then
-                            FlashRemote:FireServer(0.0001, camObject)
+                            firesignal(FlashEvent.OnClientEvent, LocalPlayer, 0.0001, camObject)
                         end
                     end
                     task.wait(0.1) 
