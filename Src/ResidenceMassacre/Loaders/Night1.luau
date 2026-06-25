@@ -40,8 +40,7 @@ shared.ESP_REGISTRY = {
 }
 
 
-
-shared.Load("Tabs", "Player")
 shared.Load("Tabs", "Main")
+shared.Load("Tabs", "Player")
 shared.Load("Tabs", "Visuals")
 
