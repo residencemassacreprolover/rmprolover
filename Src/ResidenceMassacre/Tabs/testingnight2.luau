@@ -3,7 +3,6 @@ local Library = shared.Library
 local Toggles = shared.Toggles
 local Options = shared.Options
 
-
 local MainTab = Window:AddTab({
     Name = "Night 2",
     Icon = "zap"
@@ -11,13 +10,13 @@ local MainTab = Window:AddTab({
 
 local AutoGB = MainTab:AddLeftGroupbox("Exploits")
 
+local remotes = game:GetService("ReplicatedStorage"):WaitForChild("Remotes")
+
 local FlashEvent = remotes:WaitForChild("FlashCam")
 local CamerasFolder = workspace:WaitForChild("Cameras")
 local LocalPlayer = game:GetService("Players").LocalPlayer
 
 local selectedCamera = "1"
-
-
 
 AutoGB:AddDropdown("CameraSelect", {
     Text = "Cameras",
@@ -28,7 +27,6 @@ AutoGB:AddDropdown("CameraSelect", {
         selectedCamera = Value
     end
 })
-
 
 AutoGB:AddButton({
     Text = "Flash Selected Camera",
@@ -41,7 +39,6 @@ AutoGB:AddButton({
         end
     end
 })
-
 
 AutoGB:AddToggle("LoopFlashAll", {
     Text = "Loop Flash ALL Cameras",
