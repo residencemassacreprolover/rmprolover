@@ -3,7 +3,7 @@ local Data = {
         ["Name"] = "Night1", 
         ["Folder"] = "ResidenceMassacre",
         ["Loader"] = "Night1" 
-    }
+    },
     [16667550979] = {
         ["Name"] = "Night2", 
         ["Folder"] = "ResidenceMassacre",
