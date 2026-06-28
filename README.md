@@ -34,4 +34,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/residencemassacreprol
 
 + This Project Is **open source**, but don't be a skid.
 
-+ THIS SCRIPT IS NOT AFFLICTED WITH MSPAINT, THE MSPAINT TEAM OR ANYONE ELSE.
++ THIS SCRIPT IS NOT AFFLIATED WITH MSPAINT, THE MSPAINT TEAM OR ANYONE ELSE.
