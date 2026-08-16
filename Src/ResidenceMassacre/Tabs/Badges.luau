@@ -41,7 +41,7 @@ end
 
 GeneralGB:AddButton({
     Text = "Electrocuted",
-    Tooltip = "Automatically Awards you The "Electrocuted" Badge",
+    Tooltip = "Automatically Awards you The 'Electrocuted' Badge",
     Func = function()
         fixActiveWires()
     end
@@ -53,7 +53,7 @@ local AsphyxiaRemote = game:GetService("ReplicatedStorage").Remotes.Asphyxia
 GeneralGB:AddButton({
     Text = "Asphyxia",
     Risky = true,
-    Tooltip = "Automatically Awards you The "Asphyxia" Badge/n WILL KILL YOU",
+    Tooltip = "Automatically Awards you The 'Asphyxia' Badge/n WILL KILL YOU",
     Func = function()
         AsphyxiaRemote:FireServer()
     end
