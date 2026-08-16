@@ -3,18 +3,17 @@ local Library = shared.Library
 local Toggles = shared.Toggles
 local Options = shared.Options
 
-
 local BadgesTab = Window:AddTab({
     Name = "Badges",
     Icon = "zap"
 })
 
-local GeneralGB = MainTab:AddLeftGroupbox("General")
+local GeneralGB = BadgesTab:AddLeftGroupbox("General")
 
 --// vars
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local gameState = replicatedStorage:WaitForChild("GameState", 5)
-local remotes = replicatedStorage:FindFirstChild("Remotes")
+local remotes = replicatedStorage:WaitForChild("Remotes")
 
 
 -- Electrocuted Badge
@@ -43,17 +42,17 @@ GeneralGB:AddButton({
     Text = "Electrocuted",
     Tooltip = "Automatically Awards you The Electrocuted Badge",
     Func = function()
-        fixActiveWires()
+        clickWrongWire()
     end
 })
 
 -- Asphyxia
-local AsphyxiaRemote = game:GetService("ReplicatedStorage").Remotes.Asphyxia
+local AsphyxiaRemote = remotes:WaitForChild("Asphyxia")
 
 GeneralGB:AddButton({
     Text = "Asphyxia",
     Risky = true,
-    Tooltip = "Automatically Awards you The Asphyxia Badge/n WILL KILL YOU",
+    Tooltip = "Automatically Awards you The Asphyxia Badge\nWILL KILL YOU",
     Func = function()
         AsphyxiaRemote:FireServer()
     end
