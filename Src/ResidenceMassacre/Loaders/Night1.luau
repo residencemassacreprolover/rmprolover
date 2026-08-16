@@ -43,4 +43,4 @@ shared.ESP_REGISTRY = {
 shared.Load("Tabs", "Main")
 shared.Load("Tabs", "Player")
 shared.Load("Tabs", "Visuals")
-
+shared.Load("Tabs", "Badges")
